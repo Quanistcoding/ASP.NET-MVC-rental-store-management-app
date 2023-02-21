@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Rental_Store_Management.Models
 {
@@ -16,6 +17,7 @@ namespace Rental_Store_Management.Models
 
         [Required]
         [Range(0,Int32.MaxValue)]
+        [DisplayName("In Stock")]
         public int NumberInStock { get; set; }
 
     }

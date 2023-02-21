@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rental_Store_Management.Models
@@ -14,6 +15,7 @@ namespace Rental_Store_Management.Models
 
         [Required]
         [Range(0, 100)]
+        [DisplayName("Discount Rate")]
         public int DiscountRate{ get; set; }
 
     }

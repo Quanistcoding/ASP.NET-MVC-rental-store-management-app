@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Rental_Store_Management.Models
 {
@@ -14,7 +15,9 @@ namespace Rental_Store_Management.Models
         public string Phone  { get; set; }
 
         [Required]
+        [DisplayName("Driver's License Number")]
         public string DriverLicenseNumber { get; set; }
+        [DisplayName(" Membership Type")]
 
         public MembershipType? MembershipType { get; set; }
 
