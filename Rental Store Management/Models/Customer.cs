@@ -12,6 +12,7 @@ namespace Rental_Store_Management.Models
         public string Name { get; set; }
         [Required]
         [StringLength(12)]
+        [Phone]
         public string Phone  { get; set; }
 
         [Required]
