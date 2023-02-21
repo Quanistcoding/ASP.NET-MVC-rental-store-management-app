@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="~/Rental_Store_Management.styles.css" asp-append-version="true" />
 </head>
 <body>
+   
+ @if (@TempData["error"] != null) 
+ {
+        <div class="alert alert-danger alert-dismissible fade show fixed-bottom" role="alert">
+            <strong>@TempData["error"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+ }
+    
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">

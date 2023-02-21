@@ -59,6 +59,14 @@ namespace Rental_Store_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Phone,DriverLicenseNumber,MembershipTypeId")] Customer customer)
         {
+          
+            ViewData["MembershipTypeId"] = new SelectList(_context.MembershipTypes, "Id", "Name");
+
+            if (CustomerExistsByDriverLicenseNumber(customer.DriverLicenseNumber)) {
+                TempData["error"] = "Driver's license number already exists.";
+                return View();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(customer);
@@ -77,11 +85,17 @@ namespace Rental_Store_Management.Controllers
                 return NotFound();
             }
 
+            ViewData["MembershipTypeId"] = new SelectList(_context.MembershipTypes, "Id", "Name");
+
+
             var customer = await _context.Customers.FindAsync(id);
+
+
             if (customer == null)
             {
                 return NotFound();
             }
+
             ViewData["MembershipTypeId"] = new SelectList(_context.MembershipTypes, "Id", "Name", customer.MembershipTypeId);
             return View(customer);
         }
@@ -96,6 +110,14 @@ namespace Rental_Store_Management.Controllers
             if (id != customer.Id)
             {
                 return NotFound();
+            }
+
+            ViewData["MembershipTypeId"] = new SelectList(_context.MembershipTypes, "Id", "Name", customer.MembershipTypeId);
+
+            if (CustomerExistsByDriverLicenseNumber(customer.DriverLicenseNumber) && customer.DriverLicenseNumber != customer.DriverLicenseNumber)
+            {
+                TempData["error"] = "Driver's license number already exists.";
+                return View();
             }
 
             if (ModelState.IsValid)
@@ -118,7 +140,6 @@ namespace Rental_Store_Management.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MembershipTypeId"] = new SelectList(_context.MembershipTypes, "Id", "Name", customer.MembershipTypeId);
             return View(customer);
         }
 
@@ -163,6 +184,11 @@ namespace Rental_Store_Management.Controllers
         private bool CustomerExists(int id)
         {
           return _context.Customers.Any(e => e.Id == id);
+        }
+
+        private bool CustomerExistsByDriverLicenseNumber(string DriverLicenseNumber)
+        {
+            return _context.Customers.Any(e => e.DriverLicenseNumber == DriverLicenseNumber);
         }
     }
 }
