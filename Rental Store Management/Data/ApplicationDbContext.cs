@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Rental_Store_Management.Models;
 
 namespace Rental_Store_Management.Data
 {
@@ -9,5 +10,8 @@ namespace Rental_Store_Management.Data
             : base(options)
         {
         }
+
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Genre> Genres { get; set; }
     }
 }
