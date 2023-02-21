@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rental_Store_Management.Models
@@ -11,6 +12,7 @@ namespace Rental_Store_Management.Models
 
         [Required]
         [MaxLength(255)]
+        [DisplayName("Driver's License Number")]
         public string DriverLicenseNumber { get; set; }
 
     }
