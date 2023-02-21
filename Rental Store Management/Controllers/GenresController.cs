@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,9 @@ using Rental_Store_Management.Models;
 
 namespace Rental_Store_Management.Controllers
 {
+    [Authorize]
+    [Authorize(Roles ="admin")]
+
     public class GenresController : Controller
     {
         private readonly ApplicationDbContext _context;
