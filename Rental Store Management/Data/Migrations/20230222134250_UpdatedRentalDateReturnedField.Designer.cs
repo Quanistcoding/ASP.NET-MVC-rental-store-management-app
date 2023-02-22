@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rental_Store_Management.Data;
 
@@ -11,9 +12,10 @@ using Rental_Store_Management.Data;
 namespace Rental_Store_Management.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230222134250_UpdatedRentalDateReturnedField")]
+    partial class UpdatedRentalDateReturnedField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +261,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("MembershipTypeId");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Genre", b =>
@@ -277,7 +279,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.MembershipType", b =>
@@ -298,7 +300,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembershipTypes", (string)null);
+                    b.ToTable("MembershipTypes");
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Movie", b =>
@@ -324,7 +326,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Rental", b =>
@@ -353,7 +355,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Rentals", (string)null);
+                    b.ToTable("Rentals");
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.ApplicationUser", b =>

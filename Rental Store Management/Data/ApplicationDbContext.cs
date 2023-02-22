@@ -17,6 +17,7 @@ namespace Rental_Store_Management.Data
         public DbSet<MembershipType> MembershipTypes { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
 
     }
 }
