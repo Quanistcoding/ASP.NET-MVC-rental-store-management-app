@@ -67,7 +67,18 @@ namespace Rental_Store_Management.Controllers
             
 
             if (ModelState.IsValid)
-            {              
+            {
+
+                if (!CustomerExists(rental.CustomerDriverLicenseNumber))
+                {
+                    TempData["error"] = "Customer with this driver license has not registered.";
+                    return View(rental);
+                }
+
+
+
+
+
                 if (!HasMovies(movieId))
                 {
                     TempData["error"] = "Movie rent out.";
@@ -202,6 +213,11 @@ namespace Rental_Store_Management.Controllers
         {
             _context.Movies.Find(movieId).NumberInStock += ChangeCount;
             await _context.SaveChangesAsync();
+        }
+
+        private bool CustomerExists(string CustomerDriverLicenseNumber)
+        {
+            return _context.Customers.Any(m => m.DriverLicenseNumber == CustomerDriverLicenseNumber);
         }
     }
 }
