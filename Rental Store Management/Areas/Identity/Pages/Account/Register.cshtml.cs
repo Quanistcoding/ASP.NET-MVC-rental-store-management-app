@@ -22,6 +22,7 @@ using Rental_Store_Management.Models;
 
 namespace Rental_Store_Management.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
