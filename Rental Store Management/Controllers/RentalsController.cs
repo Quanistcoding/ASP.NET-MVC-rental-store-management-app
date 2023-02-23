@@ -75,10 +75,6 @@ namespace Rental_Store_Management.Controllers
                     return View(rental);
                 }
 
-
-
-
-
                 if (!HasMovies(movieId))
                 {
                     TempData["error"] = "Movie rent out.";

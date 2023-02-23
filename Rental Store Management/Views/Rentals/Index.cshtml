@@ -12,13 +12,13 @@
         <div class="col">
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon3">Search By Driver's License: </span>
-      <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" v-on:input="search($event,'customerDriverLicenseNumber')">
     </div>
         </div>
         <div class="col">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon3">Search By Driver's Movie: </span>
-                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" v-on:input="search($event,'movie.name')">
                 </div>
         </div>
     </div>
@@ -41,12 +41,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="rental in rentals">
+            <tr v-for="rental in filteredRentals">
                 <td>
                    {{ rental.customerDriverLicenseNumber}}
                 </td>
                 <td>
-                   {{ rental.movie}}
+                   {{ rental.movie.name}}
                 </td>
                 <td>
                    {{ rental.dateRented}}
@@ -72,16 +72,25 @@
         createApp({
             data() {
                 return {
-                   rentals:[]
+                   rentals:[],
+                   filteredRentals:[]
                 }
             },
             async beforeMount(){
                 const rentalRes = await fetch("https://localhost:7275/api/rentals");
-                const movieRes = await fetch("https://localhost:7275/api/movies");
-
                 this.rentals = await rentalRes.json();
-                const movies = await movieRes.json();
-                this.rentals = this.rentals.map(rental => ({...rental,movie:movies.find(movie => movie.id == rental.movieId).name}));
+                this.filteredRentals = this.rentals;
+            },
+            methods:{
+                search(e,field){
+                    const value = e.target.value;
+                    this.filteredRentals = this.rentals;
+                    if(field == "movie.name"){
+                        this.filteredRentals = this.rentals.filter(rental => rental['movie']['name'].toLowerCase().includes(value));
+                    }else{
+                        this.filteredRentals = this.rentals.filter(rental => rental[field].toLowerCase().includes(value));
+                    }
+                }
             }
         }).mount('#app')
     </script>

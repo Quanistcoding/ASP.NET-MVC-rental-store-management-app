@@ -26,7 +26,7 @@ namespace Rental_Store_Management.Controllers.api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rental>>> GetRentals()
         {
-            return await _context.Rentals.ToListAsync();
+            return await _context.Rentals.Include(r => r.Movie).ToListAsync();
         }
 
         // GET: api/Rentals/5
