@@ -59,13 +59,27 @@ namespace Rental_Store_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CustomerDriverLicenseNumber,MovieId,DateRented,DateReturned")] Rental rental)
         {
+            int movieId = rental.MovieId;
+
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", movieId);
+            
+
             if (ModelState.IsValid)
-            {
+            {              
+                if (!HasMovies(movieId))
+                {
+                    TempData["error"] = "Movie rent out.";
+                    return View(rental);
+                }
+
                 _context.Add(rental);
+
+               _context.Movies.Find(movieId).NumberInStock--;
+                await _context.SaveChangesAsync();
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", rental.MovieId);
             return View(rental);
         }
 
@@ -99,6 +113,7 @@ namespace Rental_Store_Management.Controllers
             }
 
             if (ModelState.IsValid)
+
             {
                 try
                 {
@@ -163,6 +178,15 @@ namespace Rental_Store_Management.Controllers
         private bool RentalExists(int id)
         {
           return _context.Rentals.Any(e => e.Id == id);
+        }
+
+        private bool HasMovies(int MovieId)
+        {
+            Movie movie = _context.Movies.Find(MovieId);
+
+            if (movie == null || movie.NumberInStock == 0) return false;
+
+            return true;
         }
     }
 }
