@@ -13,7 +13,7 @@ namespace Rental_Store_Management.Models
         [Required]
         [MaxLength(100)]
         [DisplayName("Driver's License No.")]
-        public string  CustomerDriverLicenseNumber { get; set; }
+        public string CustomerDriverLicenseNumber { get; set; }
 
         public Movie? Movie { get; set; }
 
@@ -29,4 +29,5 @@ namespace Rental_Store_Management.Models
         public DateTime? DateReturned { get; set; }
 
     }
+
 }

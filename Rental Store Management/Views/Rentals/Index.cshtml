@@ -3,59 +3,86 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div id = "app">
+    <h1>Index</h1>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <div class="row">
+        <div class="col">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon3">Search By Driver's License: </span>
+      <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+    </div>
+        </div>
+        <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3">Search By Driver's Movie: </span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerDriverLicenseNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Movie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateRented)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateReturned)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="rental in rentals">
+                <td>
+                   {{ rental.customerDriverLicenseNumber}}
+                </td>
+                <td>
+                   {{ rental.movie}}
+                </td>
+                <td>
+                   {{ rental.dateRented}}
+                </td>
+                <td>
+                   {{ rental.dateReturned}}
+                </td>
+                <td>
+                    <a v-if="!rental.dateReturned" class="btn btn-link" :href="'/Rentals/Edit/' + rental.id">Return</a>
+                    <span v-else class="text-success">Returned</span>
+                </td>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerDriverLicenseNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateRented)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateReturned)
-            </th>
-            <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerDriverLicenseNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Movie.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateRented)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateReturned)
-            </td>
-            <td>
-                    @if (item.DateReturned == null)
-                    {
-                       <a asp-action="Edit" asp-route-id="@item.Id">Return</a> <span>|</span>
-                    }
-                
-                    @if (User.IsInRole("admin"))
-                    {
-                      <a asp-action="Details" asp-route-id="@item.Id">Details</a> <span>|</span>
-                      <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>                     
-                    }
 
-            </td>
-        </tr>
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script src="~/lib/vue.js"></script>
+    <script>
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                   rentals:[]
+                }
+            },
+            async beforeMount(){
+                const rentalRes = await fetch("https://localhost:7275/api/rentals");
+                const movieRes = await fetch("https://localhost:7275/api/movies");
+
+                this.rentals = await rentalRes.json();
+                const movies = await movieRes.json();
+                this.rentals = this.rentals.map(rental => ({...rental,movie:movies.find(movie => movie.id == rental.movieId).name}));
+            }
+        }).mount('#app')
+    </script>
 }
-    </tbody>
-</table>
