@@ -23,6 +23,7 @@ namespace Rental_Store_Management.Models
         public MembershipType? MembershipType { get; set; }
 
         [Required]
+        [DisplayName("Membership Type")]
         public int MembershipTypeId { get; set; }
     }
 }
