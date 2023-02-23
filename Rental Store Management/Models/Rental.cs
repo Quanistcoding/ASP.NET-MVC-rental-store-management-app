@@ -8,18 +8,20 @@ namespace Rental_Store_Management.Models
         [Key]
         public int Id { get; set; }
 
-        [DisplayName("Customer ID")]
-        public Customer? Customer { get; set; }
+        public Customer? Customr { get; set; }
+
         [Required]
-        [DisplayName("Customer ID")]
-        public int CustomerId { get; set; }
+        [MaxLength(100)]
+        [DisplayName("Driver's License No.")]
+        public string  CustomerDriverLicenseNumber { get; set; }
 
         public Movie? Movie { get; set; }
+
         [Required]
-
         [DisplayName("Movie")]
-        public int MovieId { get; set;}
+        public int MovieId { get; set; }
 
+        [Required]
         [DisplayName("Date Rented")]
         public DateTime DateRented { get; set; }
 

@@ -22,7 +22,7 @@ namespace Rental_Store_Management.Controllers
         // GET: Rentals
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Rentals.Include(r => r.Customer).Include(r => r.Movie);
+            var applicationDbContext = _context.Rentals.Include(r => r.Movie);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace Rental_Store_Management.Controllers
             }
 
             var rental = await _context.Rentals
-                .Include(r => r.Customer)
                 .Include(r => r.Movie)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rental == null)
@@ -49,10 +48,7 @@ namespace Rental_Store_Management.Controllers
         // GET: Rentals/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "DriverLicenseNumber");
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name");
-            
-
             return View();
         }
 
@@ -61,7 +57,7 @@ namespace Rental_Store_Management.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateRented,DateReturned,CustomerId,MovieId")] Rental rental)
+        public async Task<IActionResult> Create([Bind("Id,CustomerDriverLicenseNumber,MovieId,DateRented,DateReturned")] Rental rental)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +65,6 @@ namespace Rental_Store_Management.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "DriverLicenseNumber", rental.CustomerId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", rental.MovieId);
             return View(rental);
         }
@@ -87,7 +82,6 @@ namespace Rental_Store_Management.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "DriverLicenseNumber", rental.CustomerId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", rental.MovieId);
             return View(rental);
         }
@@ -97,7 +91,7 @@ namespace Rental_Store_Management.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateRented,DateReturned,CustomerId,MovieId")] Rental rental)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerDriverLicenseNumber,MovieId,DateRented,DateReturned")] Rental rental)
         {
             if (id != rental.Id)
             {
@@ -124,7 +118,6 @@ namespace Rental_Store_Management.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "DriverLicenseNumber", rental.CustomerId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", rental.MovieId);
             return View(rental);
         }
@@ -138,7 +131,6 @@ namespace Rental_Store_Management.Controllers
             }
 
             var rental = await _context.Rentals
-                .Include(r => r.Customer)
                 .Include(r => r.Movie)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rental == null)
