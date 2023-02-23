@@ -259,7 +259,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("MembershipTypeId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Genre", b =>
@@ -277,7 +277,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.MembershipType", b =>
@@ -298,7 +298,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembershipTypes");
+                    b.ToTable("MembershipTypes", (string)null);
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Movie", b =>
@@ -324,7 +324,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.Rental", b =>
@@ -358,7 +358,7 @@ namespace Rental_Store_Management.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Rentals");
+                    b.ToTable("Rentals", (string)null);
                 });
 
             modelBuilder.Entity("Rental_Store_Management.Models.ApplicationUser", b =>
