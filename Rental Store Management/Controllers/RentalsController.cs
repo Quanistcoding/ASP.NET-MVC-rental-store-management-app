@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Rental_Store_Management.Models;
 
 namespace Rental_Store_Management.Controllers
 {
+    
     public class RentalsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -72,10 +74,8 @@ namespace Rental_Store_Management.Controllers
                     return View(rental);
                 }
 
+                await UpdateMovieCount(-1, movieId);
                 _context.Add(rental);
-
-               _context.Movies.Find(movieId).NumberInStock--;
-                await _context.SaveChangesAsync();
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -112,12 +112,16 @@ namespace Rental_Store_Management.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
 
+
+
+            if (ModelState.IsValid && rental.DateReturned != null)
             {
                 try
                 {
+                    await UpdateMovieCount(1, rental.MovieId);
                     _context.Update(rental);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -133,11 +137,16 @@ namespace Rental_Store_Management.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            TempData["error"] = rental.DateReturned == null ? "Must choose a returned date." : null;
+
+
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Name", rental.MovieId);
             return View(rental);
         }
 
         // GET: Rentals/Delete/5
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Rentals == null)
@@ -184,9 +193,15 @@ namespace Rental_Store_Management.Controllers
         {
             Movie movie = _context.Movies.Find(MovieId);
 
-            if (movie == null || movie.NumberInStock == 0) return false;
+            if (movie == null || movie.NumberInStock <= 0) return false;
 
             return true;
+        }
+
+        private async Task UpdateMovieCount(int ChangeCount, int movieId)
+        {
+            _context.Movies.Find(movieId).NumberInStock += ChangeCount;
+            await _context.SaveChangesAsync();
         }
     }
 }
